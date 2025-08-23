@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import History from "./History";
 import Navbar from "./Navbar";
 import NotUsing from "./NotUsing";
@@ -5,7 +6,9 @@ import RollingContainer from "./RollingContainer";
 import TotalBetHistory from "./TotalBetHistory";
 
 const Home = () => {
-  return (
+  const errorMessage = sessionStorage.getItem("errorMessage");
+  const { token } = useSelector((state) => state.auth);
+  return token ? (
     <div className="sc-aXZVg dgckRQ">
       <div>
         <div className="Toastify" />
@@ -39,6 +42,13 @@ const Home = () => {
         <div className="sc-fqkvVR bLacGO exited modal-wrapper">
           <div />
         </div>
+      </div>
+    </div>
+  ) : (
+    <div className="error-container">
+      <div className="alert alert-danger text-center m-0 " role="alert">
+        {errorMessage ||
+          "URL parameters are missing or invalid. Key: token | Value"}
       </div>
     </div>
   );
