@@ -4,8 +4,10 @@ const RollingContainer = () => {
   const [stake, setStake] = useState(10);
   const [counter, setCounter] = useState(15);
   const [rangeWidth, setRangeWidth] = useState(100);
-  const [translateX, setTranslateX] = useState(1113.42);
+  const [translateX, setTranslateX] = useState("50%");
   const [loading, setLoading] = useState(false);
+  const [cardName, setCardName] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     if (counter > 0) {
@@ -33,27 +35,54 @@ const RollingContainer = () => {
 
   useEffect(() => {
     if (counter === 0) {
-      const random = Math.floor(Math.random() * (50 - 30 + 1)) + 30;
-      const multiply = 56 * random;
-      setTranslateX((prev) => prev + multiply);
-      const randomDelay = Math.random() * (6000 - 3000) + 3000;
+      // const random = Math.floor(Math.random() * (50 - 30 + 1)) + 30;
+      // const multiply = 56 * random;
+      // setTranslateX((prev) => prev + multiply);
+      // const randomDelay = Math.random() * (6000 - 3000) + 3000;
+
+      setTranslateX(-10000);
+
       const timeout = setTimeout(() => {
+        const cards = ["green", "black", "red"];
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+        setCardName(randomCard);
+        setTranslateX(0);
         setTimeout(() => {
           setLoading(true);
-        }, 3000);
-        setTranslateX(1113.42);
-      }, randomDelay);
+        }, 6000);
+      }, 2000);
 
       return () => {
         clearTimeout(timeout);
       };
-    } else {
-      const timeout = setTimeout(() => {
-        setTranslateX(1113.42);
-      }, 5000);
-      return () => clearTimeout(timeout);
     }
   }, [counter]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const style =
+    cardName === "red"
+      ? "+ 50% - 52px"
+      : cardName === "black"
+      ? "+ 50% - 52px - 101px"
+      : "+ 50% - 52px - 101px - 101px";
+  const mobileStyle =
+    cardName === "red"
+      ? "+ 50% - 31px"
+      : cardName === "black"
+      ? "+ 50% - 31px - 55px"
+      : "+ 50% - 31px - 55px - 55px";
 
   return (
     <div className="sc-fXSgeo dJFZGz">
@@ -85,10 +114,13 @@ const RollingContainer = () => {
           <div
             className="sc-gmPhUn iiXCiw"
             style={{
-              transform: `translateX(-${translateX}px)`,
+              transform: cardName
+                ? `translateX(calc(${translateX}px ${
+                    windowWidth > 768 ? style : mobileStyle
+                  }))`
+                : `translateX(${translateX}px)`,
               transitionProperty: "transform",
-              transitionDuration: "3s",
-              transitionTimingFunction: "ease-in-out",
+              transitionDuration: "6s",
             }}
           >
             <div className="sc-hRJfrW bPNgAz">
@@ -101,6 +133,12 @@ const RollingContainer = () => {
               <div className="sc-iHbSHJ grThzw">
                 <div>2x</div>
                 <div>14</div>
+              </div>
+            </div>
+            <div className="sc-hRJfrW bPNgAz">
+              <div className="sc-iHbSHJ dXhjaW">
+                <div>14x</div>
+                <div>0</div>
               </div>
             </div>
             <div className="sc-hRJfrW bPNgAz">
@@ -133,12 +171,7 @@ const RollingContainer = () => {
                 <div>4</div>
               </div>
             </div>
-            <div className="sc-hRJfrW bPNgAz">
-              <div className="sc-iHbSHJ dXhjaW">
-                <div>14x</div>
-                <div>0</div>
-              </div>
-            </div>
+
             <div className="sc-hRJfrW bPNgAz">
               <div className="sc-iHbSHJ grThzw">
                 <div>2x</div>
